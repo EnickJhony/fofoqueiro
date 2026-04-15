@@ -1,6 +1,6 @@
 import logging
 from datetime import datetime
-from zoneinfo import ZoneInfo
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from src.config.settings import Settings
 from src.feeds.collector import collect_news
@@ -31,7 +31,13 @@ def collect_and_store_job(settings: Settings, repository: NewsRepository) -> Non
 
 
 def send_daily_summary_job(settings: Settings, repository: NewsRepository) -> None:
-    tz = ZoneInfo(settings.timezone_name)
+    try:
+        tz = ZoneInfo(settings.timezone_name)
+    except ZoneInfoNotFoundError as exc:
+        raise RuntimeError(
+            "Timezone invalida ou base de timezones ausente. "
+            "Instale/atualize o pacote 'tzdata' e confirme TIMEZONE_NAME."
+        ) from exc
     today = datetime.now(tz=tz).date()
     rows = repository.get_news_for_day(today)
     summary = build_daily_summary(rows, today)
