@@ -35,5 +35,22 @@ def send_daily_summary_job(settings: Settings, repository: NewsRepository) -> No
     today = datetime.now(tz=tz).date()
     rows = repository.get_news_for_day(today)
     summary = build_daily_summary(rows, today)
-    dispatch_message(settings=settings, message=summary)
-    logger.info("Resumo diario enviado | data=%s | itens=%s", today.isoformat(), len(rows))
+    sent = dispatch_message(settings=settings, message=summary)
+
+    if settings.send_to in {"telegram", "whatsapp", "ambos"}:
+        if sent:
+            logger.info("Resumo diario enviado | data=%s | itens=%s", today.isoformat(), len(rows))
+        else:
+            logger.warning(
+                "Resumo diario gerado mas houve falha no envio | data=%s | itens=%s | canal=%s",
+                today.isoformat(),
+                len(rows),
+                settings.send_to,
+            )
+    else:
+        logger.info(
+            "Resumo diario gerado sem envio | data=%s | itens=%s | canal=%s",
+            today.isoformat(),
+            len(rows),
+            settings.send_to,
+        )
