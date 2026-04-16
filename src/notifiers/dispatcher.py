@@ -8,22 +8,24 @@ logger = logging.getLogger(__name__)
 
 
 
-def dispatch_message(settings: Settings, message: str) -> None:
+def dispatch_message(settings: Settings, message: str) -> bool:
     send_to = settings.send_to
 
     if send_to == "telegram":
-        _send_telegram(settings, message)
+        return _send_telegram(settings, message)
     elif send_to == "whatsapp":
-        _send_whatsapp(settings, message)
+        return _send_whatsapp(settings, message)
     elif send_to == "ambos":
-        _send_telegram(settings, message)
-        _send_whatsapp(settings, message)
+        telegram_ok = _send_telegram(settings, message)
+        whatsapp_ok = _send_whatsapp(settings, message)
+        return telegram_ok and whatsapp_ok
     else:
         logger.info("Envio desativado. Defina ENVIAR_PARA como telegram, whatsapp ou ambos.")
+        return False
 
 
 
-def _send_telegram(settings: Settings, message: str) -> None:
+def _send_telegram(settings: Settings, message: str) -> bool:
     try:
         success = send_telegram_message(
             token=settings.telegram_bot_token,
@@ -32,12 +34,14 @@ def _send_telegram(settings: Settings, message: str) -> None:
         )
         if not success:
             logger.warning("Telegram nao configurado ou resposta nao foi 200.")
+        return success
     except Exception as exc:
         logger.exception("Falha no envio para Telegram: %s", exc)
+        return False
 
 
 
-def _send_whatsapp(settings: Settings, message: str) -> None:
+def _send_whatsapp(settings: Settings, message: str) -> bool:
     try:
         success = send_whatsapp_message(
             phone=settings.whatsapp_phone,
@@ -46,5 +50,7 @@ def _send_whatsapp(settings: Settings, message: str) -> None:
         )
         if not success:
             logger.warning("WhatsApp nao configurado ou resposta nao foi 200.")
+        return success
     except Exception as exc:
         logger.exception("Falha no envio para WhatsApp: %s", exc)
+        return False

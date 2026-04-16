@@ -10,6 +10,9 @@ O que pode ser útil é criar um ambiente virtual Python, por exemplo com `.venv
 ```bash
 python -m venv .venv
 ```
+```
+.venv\Scripts\activate.bat
+```
 
 ## Instalação
 
