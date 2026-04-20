@@ -15,6 +15,7 @@ DEFAULT_RSS_SOURCES = [
 
 @dataclass(slots=True)
 class Settings:
+    sqlite_enabled: bool
     db_path: str
     postgres_enabled: bool
     postgres_host: str
@@ -50,6 +51,7 @@ def load_settings() -> Settings:
     rss_from_env = _split_csv(os.getenv("RSS_SOURCES", ""))
 
     return Settings(
+        sqlite_enabled=_as_bool(os.getenv("SQLITE_ENABLED", "true")),
         db_path=os.getenv("DB_PATH", "data/fofoqueiro.db"),
         postgres_enabled=_as_bool(os.getenv("POSTGRES_ENABLED", "false")),
         postgres_host=os.getenv("POSTGRES_HOST", "localhost").strip(),

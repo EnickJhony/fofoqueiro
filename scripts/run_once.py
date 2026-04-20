@@ -10,17 +10,28 @@ def main() -> None:
     configure_logging()
     settings = load_settings()
 
-    sqlite_conn = get_connection(settings.db_path)
-    init_db(sqlite_conn)
-    sqlite_repository = NewsRepository(sqlite_conn)
+    sqlite_repository = None
+    if settings.sqlite_enabled:
+        sqlite_conn = get_connection(settings.db_path)
+        init_db(sqlite_conn)
+        sqlite_repository = NewsRepository(sqlite_conn)
 
-    repository = sqlite_repository
-
+    postgres_repository = None
     if settings.postgres_enabled:
         postgres_conn = get_postgres_connection(settings)
         init_postgres_db(postgres_conn)
         postgres_repository = PostgresNewsRepository(postgres_conn)
+
+    if sqlite_repository and postgres_repository:
         repository = MultiNewsRepository(primary=sqlite_repository, secondaries=[postgres_repository])
+    elif sqlite_repository:
+        repository = sqlite_repository
+    elif postgres_repository:
+        repository = postgres_repository
+    else:
+        raise RuntimeError(
+            "Nenhum banco habilitado. Defina SQLITE_ENABLED=true ou POSTGRES_ENABLED=true."
+        )
 
     collect_and_store_job(settings=settings, repository=repository)
     send_daily_summary_job(settings=settings, repository=repository)
