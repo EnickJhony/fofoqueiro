@@ -1,6 +1,33 @@
 import sqlite3
 from pathlib import Path
 
+from src.config.settings import Settings
+
+
+SQLITE_SCHEMA = """
+CREATE TABLE IF NOT EXISTS news (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    source_name TEXT NOT NULL,
+    source_url TEXT NOT NULL,
+    title TEXT NOT NULL,
+    link TEXT NOT NULL UNIQUE,
+    published_at TEXT NOT NULL,
+    collected_at TEXT NOT NULL DEFAULT (datetime('now'))
+);
+"""
+
+POSTGRES_SCHEMA = """
+CREATE TABLE IF NOT EXISTS news (
+    id BIGSERIAL PRIMARY KEY,
+    source_name TEXT NOT NULL,
+    source_url TEXT NOT NULL,
+    title TEXT NOT NULL,
+    link TEXT NOT NULL UNIQUE,
+    published_at TEXT NOT NULL,
+    collected_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+"""
+
 
 
 def get_connection(db_path: str) -> sqlite3.Connection:
@@ -13,17 +40,32 @@ def get_connection(db_path: str) -> sqlite3.Connection:
 
 
 def init_db(conn: sqlite3.Connection) -> None:
-    conn.execute(
-        """
-        CREATE TABLE IF NOT EXISTS news (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            source_name TEXT NOT NULL,
-            source_url TEXT NOT NULL,
-            title TEXT NOT NULL,
-            link TEXT NOT NULL UNIQUE,
-            published_at TEXT NOT NULL,
-            collected_at TEXT NOT NULL DEFAULT (datetime('now'))
-        );
-        """
+    conn.execute(SQLITE_SCHEMA)
+    conn.commit()
+
+
+def get_postgres_connection(settings: Settings):
+    try:
+        import psycopg
+        from psycopg.rows import dict_row
+    except ImportError as exc:
+        raise RuntimeError(
+            "Dependencia do PostgreSQL ausente. Instale com: pip install psycopg[binary]"
+        ) from exc
+
+    conn = psycopg.connect(
+        host=settings.postgres_host,
+        port=settings.postgres_port,
+        user=settings.postgres_user,
+        password=settings.postgres_password,
+        dbname=settings.postgres_db,
+        row_factory=dict_row,
     )
+    conn.autocommit = False
+    return conn
+
+
+def init_postgres_db(conn) -> None:
+    with conn.cursor() as cursor:
+        cursor.execute(POSTGRES_SCHEMA)
     conn.commit()

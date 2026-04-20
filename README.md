@@ -26,6 +26,20 @@ python -m pip install -r requirements.txt
 2. Ajuste os feeds em `RSS_SOURCES`.
 3. Configure `ENVIAR_PARA` como `telegram`, `whatsapp`, `ambos` ou `nenhum`.
 4. Preencha credenciais do canal escolhido.
+5. Por padrao, o projeto grava no SQLite (`DB_PATH`).
+6. Para gravar tambem no PostgreSQL, ative `POSTGRES_ENABLED=true` e preencha as variaveis `POSTGRES_*`.
+
+## Banco PostgreSQL com Docker Compose
+
+O `compose.yaml` está configurado para carregar credenciais do `.env`. Subir o PostgreSQL local:
+
+```bash
+docker compose up -d
+```
+
+O Docker Compose lerá automaticamente as variáveis `POSTGRES_USER`, `POSTGRES_PASSWORD`, `POSTGRES_DB` e `POSTGRES_PORT` do seu arquivo `.env`.
+
+Com o PostgreSQL ativo e `POSTGRES_ENABLED=true`, cada coleta passa a cadastrar as noticias no SQLite e no PostgreSQL.
 
 ## Estrutura do projeto
 

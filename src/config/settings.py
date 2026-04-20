@@ -16,6 +16,12 @@ DEFAULT_RSS_SOURCES = [
 @dataclass(slots=True)
 class Settings:
     db_path: str
+    postgres_enabled: bool
+    postgres_host: str
+    postgres_port: int
+    postgres_user: str
+    postgres_password: str
+    postgres_db: str
     rss_sources: list[str]
     fetch_interval_hours: int
     max_news_per_source: int
@@ -33,6 +39,10 @@ def _split_csv(value: str) -> list[str]:
     return [item for item in items if item]
 
 
+def _as_bool(value: str) -> bool:
+    return value.strip().lower() in {"1", "true", "yes", "on", "sim"}
+
+
 
 def load_settings() -> Settings:
     load_dotenv(dotenv_path=Path(".env"), override=False)
@@ -41,6 +51,12 @@ def load_settings() -> Settings:
 
     return Settings(
         db_path=os.getenv("DB_PATH", "data/fofoqueiro.db"),
+        postgres_enabled=_as_bool(os.getenv("POSTGRES_ENABLED", "false")),
+        postgres_host=os.getenv("POSTGRES_HOST", "localhost").strip(),
+        postgres_port=int(os.getenv("POSTGRES_PORT", "5432")),
+        postgres_user=os.getenv("POSTGRES_USER", "fofoqueiro").strip(),
+        postgres_password=os.getenv("POSTGRES_PASSWORD", "").strip(),
+        postgres_db=os.getenv("POSTGRES_DB", "fofoqueiro").strip(),
         rss_sources=rss_from_env or DEFAULT_RSS_SOURCES,
         fetch_interval_hours=int(os.getenv("FETCH_INTERVAL_HOURS", "4")),
         max_news_per_source=int(os.getenv("MAX_NOTICIAS", "5")),

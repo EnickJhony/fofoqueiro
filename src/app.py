@@ -1,8 +1,8 @@
 from src.config.logging import configure_logging
 from src.config.settings import load_settings
 from src.scheduler.cron import start_scheduler
-from src.storage.database import get_connection, init_db
-from src.storage.repository import NewsRepository
+from src.storage.database import get_connection, get_postgres_connection, init_db, init_postgres_db
+from src.storage.repository import MultiNewsRepository, NewsRepository, PostgresNewsRepository
 
 
 
@@ -10,10 +10,18 @@ def main() -> None:
     configure_logging()
     settings = load_settings()
 
-    conn = get_connection(settings.db_path)
-    init_db(conn)
+    sqlite_conn = get_connection(settings.db_path)
+    init_db(sqlite_conn)
+    sqlite_repository = NewsRepository(sqlite_conn)
 
-    repository = NewsRepository(conn)
+    repository = sqlite_repository
+
+    if settings.postgres_enabled:
+        postgres_conn = get_postgres_connection(settings)
+        init_postgres_db(postgres_conn)
+        postgres_repository = PostgresNewsRepository(postgres_conn)
+        repository = MultiNewsRepository(primary=sqlite_repository, secondaries=[postgres_repository])
+
     start_scheduler(settings=settings, repository=repository)
 
 

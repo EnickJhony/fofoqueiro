@@ -1,4 +1,5 @@
 feedparser==6.0.11
+psycopg[binary]>=3.2.10
 python-dotenv==1.1.0
 schedule==1.2.2
 tzdata==2025.2
