@@ -24,6 +24,7 @@ class Settings:
     postgres_password: str
     postgres_db: str
     rss_sources: list[str]
+    fetch_interval_minutes: int
     fetch_interval_hours: int
     max_news_per_source: int
     timezone_name: str
@@ -60,6 +61,7 @@ def load_settings() -> Settings:
         postgres_password=os.getenv("POSTGRES_PASSWORD", "").strip(),
         postgres_db=os.getenv("POSTGRES_DB", "fofoqueiro").strip(),
         rss_sources=rss_from_env or DEFAULT_RSS_SOURCES,
+        fetch_interval_minutes=int(os.getenv("FETCH_INTERVAL_MINUTES", "0")),
         fetch_interval_hours=int(os.getenv("FETCH_INTERVAL_HOURS", "4")),
         max_news_per_source=int(os.getenv("MAX_NOTICIAS", "5")),
         timezone_name=os.getenv("TIMEZONE_NAME", "America/Manaus"),

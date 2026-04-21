@@ -29,6 +29,7 @@ python -m pip install -r requirements.txt
 5. Por padrao, o projeto grava no SQLite (`SQLITE_ENABLED=true` e `DB_PATH`).
 6. Para gravar tambem no PostgreSQL, ative `POSTGRES_ENABLED=true` e preencha as variaveis `POSTGRES_*`.
 7. Para rodar somente com PostgreSQL (ex.: Railway), use `SQLITE_ENABLED=false` e `POSTGRES_ENABLED=true`.
+8. Para testes mais rapidos do scheduler, defina `FETCH_INTERVAL_MINUTES=10` (com `0`, ele usa `FETCH_INTERVAL_HOURS`).
 
 ## Banco PostgreSQL com Docker Compose
 
