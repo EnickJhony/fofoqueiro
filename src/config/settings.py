@@ -18,11 +18,13 @@ class Settings:
     sqlite_enabled: bool
     db_path: str
     postgres_enabled: bool
+    postgres_dsn: str
     postgres_host: str
     postgres_port: int
     postgres_user: str
     postgres_password: str
     postgres_db: str
+    postgres_sslmode: str
     rss_sources: list[str]
     fetch_interval_minutes: int
     fetch_interval_hours: int
@@ -50,16 +52,23 @@ def load_settings() -> Settings:
     load_dotenv(dotenv_path=Path(".env"), override=False)
 
     rss_from_env = _split_csv(os.getenv("RSS_SOURCES", ""))
+    postgres_dsn = (
+        os.getenv("DATABASE_URL", "").strip()
+        or os.getenv("DATABASE_PUBLIC_URL", "").strip()
+        or os.getenv("POSTGRES_DSN", "").strip()
+    )
 
     return Settings(
         sqlite_enabled=_as_bool(os.getenv("SQLITE_ENABLED", "true")),
         db_path=os.getenv("DB_PATH", "data/fofoqueiro.db"),
         postgres_enabled=_as_bool(os.getenv("POSTGRES_ENABLED", "false")),
+        postgres_dsn=postgres_dsn,
         postgres_host=os.getenv("POSTGRES_HOST", "localhost").strip(),
         postgres_port=int(os.getenv("POSTGRES_PORT", "5432")),
         postgres_user=os.getenv("POSTGRES_USER", "fofoqueiro").strip(),
         postgres_password=os.getenv("POSTGRES_PASSWORD", "").strip(),
         postgres_db=os.getenv("POSTGRES_DB", "fofoqueiro").strip(),
+        postgres_sslmode=os.getenv("POSTGRES_SSLMODE", "prefer").strip().lower(),
         rss_sources=rss_from_env or DEFAULT_RSS_SOURCES,
         fetch_interval_minutes=int(os.getenv("FETCH_INTERVAL_MINUTES", "0")),
         fetch_interval_hours=int(os.getenv("FETCH_INTERVAL_HOURS", "4")),

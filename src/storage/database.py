@@ -53,14 +53,18 @@ def get_postgres_connection(settings: Settings):
             "Dependencia do PostgreSQL ausente. Instale com: pip install psycopg[binary]"
         ) from exc
 
-    conn = psycopg.connect(
-        host=settings.postgres_host,
-        port=settings.postgres_port,
-        user=settings.postgres_user,
-        password=settings.postgres_password,
-        dbname=settings.postgres_db,
-        row_factory=dict_row,
-    )
+    if settings.postgres_dsn:
+        conn = psycopg.connect(settings.postgres_dsn, row_factory=dict_row)
+    else:
+        conn = psycopg.connect(
+            host=settings.postgres_host,
+            port=settings.postgres_port,
+            user=settings.postgres_user,
+            password=settings.postgres_password,
+            dbname=settings.postgres_db,
+            sslmode=settings.postgres_sslmode,
+            row_factory=dict_row,
+        )
     conn.autocommit = False
     return conn
 
