@@ -11,14 +11,25 @@ from src.notifiers.telegram import (
 
 def _build_settings(send_to: str) -> Settings:
     return Settings(
+        sqlite_enabled=True,
         db_path="data/fofoqueiro.db",
+        postgres_enabled=False,
+        postgres_dsn="",
+        postgres_host="localhost",
+        postgres_port=5432,
+        postgres_user="user",
+        postgres_password="pass",
+        postgres_db="database",
+        postgres_sslmode="prefer",
         rss_sources=[],
+        fetch_interval_minutes=0,
         fetch_interval_hours=4,
         max_news_per_source=5,
         timezone_name="America/Manaus",
         send_to=send_to,
         telegram_bot_token="token",
         telegram_chat_id="chat",
+        telegram_chat_ids=["chat"],
         whatsapp_phone="phone",
         whatsapp_apikey="apikey",
     )
@@ -68,6 +79,22 @@ def test_dispatch_message_ambos_requires_both(monkeypatch) -> None:
     monkeypatch.setattr("src.notifiers.dispatcher._send_whatsapp", lambda *_: False)
 
     assert dispatch_message(settings, "mensagem") is False
+
+
+def test_dispatch_message_sends_to_multiple_telegram_chats(monkeypatch) -> None:
+    settings = _build_settings(send_to="telegram")
+    settings.telegram_chat_ids = ["111", "222", "333"]
+    sent_to: list[str] = []
+
+    def fake_send(token: str, chat_id: str, message: str) -> bool:
+        del token, message
+        sent_to.append(chat_id)
+        return True
+
+    monkeypatch.setattr("src.notifiers.dispatcher.send_telegram_message", fake_send)
+
+    assert dispatch_message(settings, "mensagem") is True
+    assert sent_to == ["111", "222", "333"]
 
 
 def test_normalize_chat_id_adds_at_prefix_for_username() -> None:

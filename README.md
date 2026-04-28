@@ -26,10 +26,12 @@ python -m pip install -r requirements.txt
 2. Ajuste os feeds em `RSS_SOURCES`.
 3. Configure `ENVIAR_PARA` como `telegram`, `whatsapp`, `ambos` ou `nenhum`.
 4. Preencha credenciais do canal escolhido.
-5. Por padrao, o projeto grava no SQLite (`SQLITE_ENABLED=true` e `DB_PATH`).
-6. Para gravar tambem no PostgreSQL, ative `POSTGRES_ENABLED=true` e preencha as variaveis `POSTGRES_*`.
-7. Para rodar somente com PostgreSQL (ex.: Railway), use `SQLITE_ENABLED=false` e `POSTGRES_ENABLED=true`.
-8. Para testes mais rapidos do scheduler, defina `FETCH_INTERVAL_MINUTES=10` (com `0`, ele usa `FETCH_INTERVAL_HOURS`).
+5. Para Telegram em varios destinos, use `TELEGRAM_CHAT_IDS` com IDs separados por virgula.
+6. `TELEGRAM_CHAT_ID` continua funcionando para um unico destino (compatibilidade).
+7. Por padrao, o projeto grava no SQLite (`SQLITE_ENABLED=true` e `DB_PATH`).
+8. Para gravar tambem no PostgreSQL, ative `POSTGRES_ENABLED=true` e preencha as variaveis `POSTGRES_*`.
+9. Para rodar somente com PostgreSQL (ex.: Railway), use `SQLITE_ENABLED=false` e `POSTGRES_ENABLED=true`.
+10. Para testes mais rapidos do scheduler, defina `FETCH_INTERVAL_MINUTES=10` (com `0`, ele usa `FETCH_INTERVAL_HOURS`).
 
 ## Banco PostgreSQL com Docker Compose
 

@@ -26,18 +26,35 @@ def dispatch_message(settings: Settings, message: str) -> bool:
 
 
 def _send_telegram(settings: Settings, message: str) -> bool:
-    try:
-        success = send_telegram_message(
-            token=settings.telegram_bot_token,
-            chat_id=settings.telegram_chat_id,
-            message=message,
-        )
-        if not success:
-            logger.warning("Telegram nao configurado ou resposta nao foi 200.")
-        return success
-    except Exception as exc:
-        logger.exception("Falha no envio para Telegram: %s", exc)
+    chat_ids = settings.telegram_chat_ids
+
+    if not chat_ids and settings.telegram_chat_id:
+        chat_ids = [settings.telegram_chat_id]
+
+    if not chat_ids:
+        logger.warning("Telegram nao configurado: nenhum TELEGRAM_CHAT_ID(S) definido.")
         return False
+
+    any_success = False
+    all_success = True
+
+    for chat_id in chat_ids:
+        try:
+            success = send_telegram_message(
+                token=settings.telegram_bot_token,
+                chat_id=chat_id,
+                message=message,
+            )
+            if not success:
+                all_success = False
+                logger.warning("Falha ao enviar para chat_id=%s no Telegram.", chat_id)
+            else:
+                any_success = True
+        except Exception as exc:
+            all_success = False
+            logger.exception("Falha no envio para Telegram (chat_id=%s): %s", chat_id, exc)
+
+    return any_success and all_success
 
 
 

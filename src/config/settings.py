@@ -33,6 +33,7 @@ class Settings:
     send_to: str
     telegram_bot_token: str
     telegram_chat_id: str
+    telegram_chat_ids: list[str]
     whatsapp_phone: str
     whatsapp_apikey: str
 
@@ -57,6 +58,11 @@ def load_settings() -> Settings:
         or os.getenv("DATABASE_PUBLIC_URL", "").strip()
         or os.getenv("POSTGRES_DSN", "").strip()
     )
+    telegram_chat_id = os.getenv("TELEGRAM_CHAT_ID", "").strip()
+    telegram_chat_ids = _split_csv(os.getenv("TELEGRAM_CHAT_IDS", ""))
+
+    if not telegram_chat_ids and telegram_chat_id:
+        telegram_chat_ids = [telegram_chat_id]
 
     return Settings(
         sqlite_enabled=_as_bool(os.getenv("SQLITE_ENABLED", "true")),
@@ -76,7 +82,8 @@ def load_settings() -> Settings:
         timezone_name=os.getenv("TIMEZONE_NAME", "America/Manaus"),
         send_to=os.getenv("ENVIAR_PARA", "nenhum").strip().lower(),
         telegram_bot_token=os.getenv("TELEGRAM_BOT_TOKEN", "").strip(),
-        telegram_chat_id=os.getenv("TELEGRAM_CHAT_ID", "").strip(),
+        telegram_chat_id=telegram_chat_id,
+        telegram_chat_ids=telegram_chat_ids,
         whatsapp_phone=os.getenv("WHATSAPP_PHONE", "").strip(),
         whatsapp_apikey=os.getenv("WHATSAPP_APIKEY", "").strip(),
     )
