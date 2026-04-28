@@ -12,6 +12,9 @@ class RepositoryLike(Protocol):
     def get_news_for_day(self, day: date) -> list:
         ...
 
+    def get_news_last_hours(self, hours: int) -> list:
+        ...
+
 
 class NewsRepository:
     def __init__(self, conn: sqlite3.Connection) -> None:
@@ -49,6 +52,16 @@ class NewsRepository:
             ORDER BY source_name, published_at DESC
         """
         rows = self.conn.execute(query, (day_str,)).fetchall()
+        return rows
+
+    def get_news_last_hours(self, hours: int) -> list[sqlite3.Row]:
+        query = """
+            SELECT source_name, title, link, published_at
+            FROM news
+            WHERE published_at > datetime('now', '-' || ? || ' hours')
+            ORDER BY source_name, published_at DESC
+        """
+        rows = self.conn.execute(query, (hours,)).fetchall()
         return rows
 
 
@@ -94,6 +107,18 @@ class PostgresNewsRepository:
             rows = cursor.fetchall()
         return rows
 
+    def get_news_last_hours(self, hours: int) -> list:
+        query = """
+            SELECT source_name, title, link, published_at
+            FROM news
+            WHERE published_at > NOW() - INTERVAL %s HOUR
+            ORDER BY source_name, published_at DESC
+        """
+        with self.conn.cursor() as cursor:
+            cursor.execute(query, (hours,))
+            rows = cursor.fetchall()
+        return rows
+
 
 class MultiNewsRepository:
     def __init__(self, primary: RepositoryLike, secondaries: list[RepositoryLike] | None = None) -> None:
@@ -110,3 +135,6 @@ class MultiNewsRepository:
 
     def get_news_for_day(self, day: date) -> list:
         return self.primary.get_news_for_day(day)
+
+    def get_news_last_hours(self, hours: int) -> list:
+        return self.primary.get_news_last_hours(hours)

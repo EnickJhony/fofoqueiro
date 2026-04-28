@@ -40,7 +40,7 @@ def send_daily_summary_job(settings: Settings, repository: NewsRepository) -> No
             "Instale/atualize o pacote 'tzdata' e confirme TIMEZONE_NAME."
         ) from exc
     today = datetime.now(tz=tz).date()
-    rows = repository.get_news_for_day(today)
+    rows = repository.get_news_last_hours(24)
     summary = build_daily_summary(rows, today)
     sent = dispatch_message(settings=settings, message=summary)
 
