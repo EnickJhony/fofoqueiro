@@ -18,6 +18,7 @@ def collect_and_store_job(settings: Settings, repository: NewsRepository) -> Non
     all_news = collect_news(
         source_urls=source_urls,
         max_items_per_source=settings.max_news_per_source,
+        timezone_name=settings.timezone_name,
     )
     inserted = repository.save_news_items(all_news)
 

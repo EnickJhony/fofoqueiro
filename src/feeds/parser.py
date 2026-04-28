@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 
-def parse_feed(source_url: str, max_items: int) -> list[NewsItem]:
+def parse_feed(source_url: str, max_items: int, timezone_name: str = "America/Manaus") -> list[NewsItem]:
     parsed = feedparser.parse(source_url)
 
     if parsed.bozo:
@@ -33,7 +33,7 @@ def parse_feed(source_url: str, max_items: int) -> list[NewsItem]:
                 source_url=source_url,
                 title=title,
                 link=link,
-                published_at=parse_rss_datetime(published_raw),
+                published_at=parse_rss_datetime(published_raw, timezone_name=timezone_name),
             )
         )
 
