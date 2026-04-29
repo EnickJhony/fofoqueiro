@@ -111,7 +111,7 @@ class PostgresNewsRepository:
         query = """
             SELECT source_name, title, link, published_at
             FROM news
-            WHERE published_at > NOW() - INTERVAL %s HOUR
+            WHERE published_at > NOW() - make_interval(hours => %s)
             ORDER BY source_name, published_at DESC
         """
         with self.conn.cursor() as cursor:
