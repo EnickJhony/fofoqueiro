@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS news (
 def get_connection(db_path: str) -> sqlite3.Connection:
     db_file = Path(db_path)
     db_file.parent.mkdir(parents=True, exist_ok=True)
-    conn = sqlite3.connect(db_file)
+    conn = sqlite3.connect(db_file, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     return conn
 
