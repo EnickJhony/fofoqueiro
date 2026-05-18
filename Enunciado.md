@@ -14,48 +14,46 @@ Stacks que vamos usar:
 - Python
 
 Estrutura proposta:
-
+```
 src/
-app.py
-config/
-settings.py
-logging.py
-domain/
-entities.py
-schemas.py
-feeds/
-sources.py
-parser.py
-collector.py
-storage/
-database.py
-models.py
-repository.py
-summarizer/
-daily_summary.py
-notifiers/
-base.py
-telegram.py
-whatsapp.py
-dispatcher.py
-scheduler/
-jobs.py
-cron.py
-utils/
-datetime_utils.py
-text_utils.py
-
+    app.py
+    config/
+        settings.py
+        logging.py
+    domain/
+        entities.py
+        schemas.py
+    feeds/
+        sources.py
+        parser.py
+        collector.py
+    storage/
+        database.py
+        models.py
+        repository.py
+    summarizer/
+        daily_summary.py
+    notifiers/
+        base.py
+        telegram.py
+        whatsapp.py
+        dispatcher.py
+    scheduler/
+        jobs.py
+        cron.py
+    utils/
+        datetime_utils.py
+        text_utils.py
 tests/
-test_feeds_parser.py
-test_collector.py
-test_summary.py
-test_notifiers.py
-test_repository.py
-
+    test_feeds_parser.py
+    test_collector.py
+    test_summary.py
+    test_notifiers.py
+    test_repository.py
 scripts/
-run_once.py
-run_scheduler.py
-
+    run_once.py
+    run_scheduler.py
+```
 Funcoes:
 
 1) feeds
@@ -126,3 +124,6 @@ Passos futuros:
 - Como configurar .env
 - Como rodar uma vez (scripts/run_once.py)
 - Como iniciar scheduler (scripts/run_scheduler.py)
+
+procurar maneiras de colocar:
+- acritica
