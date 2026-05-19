@@ -4,7 +4,6 @@ Projeto para pegar informações de blogs do amazonas e faz um resumo do dia
 
 ## Ambiente virtual no Windows
 
-Não precisa criar um arquivo `.env` para a API funcionar.
 O que pode ser útil é criar um ambiente virtual Python, por exemplo com `.venv`:
 
 ```bash
