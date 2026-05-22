@@ -15,9 +15,6 @@ DEFAULT_RSS_SOURCES = [
 
 @dataclass(slots=True)
 class Settings:
-    sqlite_enabled: bool
-    db_path: str
-    postgres_enabled: bool
     postgres_dsn: str
     postgres_host: str
     postgres_port: int
@@ -44,10 +41,6 @@ def _split_csv(value: str) -> list[str]:
     return [item for item in items if item]
 
 
-def _as_bool(value: str) -> bool:
-    return value.strip().lower() in {"1", "true", "yes", "on", "sim"}
-
-
 
 def load_settings() -> Settings:
     load_dotenv(dotenv_path=Path(".env"), override=False)
@@ -65,9 +58,6 @@ def load_settings() -> Settings:
         telegram_chat_ids = [telegram_chat_id]
 
     return Settings(
-        sqlite_enabled=_as_bool(os.getenv("SQLITE_ENABLED", "true")),
-        db_path=os.getenv("DB_PATH", "data/fofoqueiro.db"),
-        postgres_enabled=_as_bool(os.getenv("POSTGRES_ENABLED", "false")),
         postgres_dsn=postgres_dsn,
         postgres_host=os.getenv("POSTGRES_HOST", "localhost").strip(),
         postgres_port=int(os.getenv("POSTGRES_PORT", "5432")),

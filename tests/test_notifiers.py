@@ -11,9 +11,6 @@ from src.notifiers.telegram import (
 
 def _build_settings(send_to: str) -> Settings:
     return Settings(
-        sqlite_enabled=True,
-        db_path="data/fofoqueiro.db",
-        postgres_enabled=False,
         postgres_dsn="",
         postgres_host="localhost",
         postgres_port=5432,
