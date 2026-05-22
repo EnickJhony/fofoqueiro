@@ -7,7 +7,7 @@ CREATE TABLE IF NOT EXISTS news (
     source_url TEXT NOT NULL,
     title TEXT NOT NULL,
     link TEXT NOT NULL UNIQUE,
-    published_at TEXT NOT NULL,
+    published_at TIMESTAMPTZ NOT NULL,
     collected_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 """
@@ -41,4 +41,23 @@ def get_postgres_connection(settings: Settings):
 def init_postgres_db(conn) -> None:
     with conn.cursor() as cursor:
         cursor.execute(POSTGRES_SCHEMA)
+        cursor.execute(
+            """
+            DO $$
+            BEGIN
+                IF EXISTS (
+                    SELECT 1
+                    FROM information_schema.columns
+                    WHERE table_name = 'news'
+                      AND column_name = 'published_at'
+                      AND data_type IN ('text', 'character varying', 'character')
+                ) THEN
+                    ALTER TABLE news
+                        ALTER COLUMN published_at
+                        TYPE TIMESTAMPTZ
+                        USING published_at::timestamptz;
+                END IF;
+            END $$;
+            """
+        )
     conn.commit()

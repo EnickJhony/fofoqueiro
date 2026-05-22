@@ -23,7 +23,7 @@ class NewsRepository:
                         item.source_url,
                         item.title,
                         item.link,
-                        item.published_at.isoformat(),
+                        item.published_at,
                     ),
                 )
                 if cursor.rowcount > 0:
@@ -37,8 +37,8 @@ class NewsRepository:
         query = """
             SELECT source_name, title, link, published_at
             FROM news
-            WHERE substring(published_at from 1 for 10) = %s
-            ORDER BY source_name, published_at DESC
+            WHERE published_at::date = %s
+            ORDER BY source_name, published_at::timestamptz DESC
         """
         with self.conn.cursor() as cursor:
             cursor.execute(query, (day_str,))
@@ -49,8 +49,8 @@ class NewsRepository:
         query = """
             SELECT source_name, title, link, published_at
             FROM news
-            WHERE published_at > NOW() - make_interval(hours => %s)
-            ORDER BY source_name, published_at DESC
+            WHERE published_at::timestamptz > NOW() - make_interval(hours => %s)
+            ORDER BY source_name, published_at::timestamptz DESC
         """
         with self.conn.cursor() as cursor:
             cursor.execute(query, (hours,))
