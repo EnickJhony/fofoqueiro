@@ -28,11 +28,8 @@ def dispatch_message(settings: Settings, message: str) -> bool:
 def _send_telegram(settings: Settings, message: str) -> bool:
     chat_ids = settings.telegram_chat_ids
 
-    if not chat_ids and settings.telegram_chat_id:
-        chat_ids = [settings.telegram_chat_id]
-
     if not chat_ids:
-        logger.warning("Telegram nao configurado: nenhum TELEGRAM_CHAT_ID(S) definido.")
+        logger.warning("Telegram nao configurado: nenhum TELEGRAM_CHAT_IDS definido.")
         return False
 
     any_success = False

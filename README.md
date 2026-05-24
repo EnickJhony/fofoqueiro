@@ -26,9 +26,8 @@ python -m pip install -r requirements.txt
 3. Configure `ENVIAR_PARA` como `telegram`, `whatsapp`, `ambos` ou `nenhum`.
 4. Preencha credenciais do canal escolhido.
 5. Para Telegram em varios destinos, use `TELEGRAM_CHAT_IDS` com IDs separados por virgula.
-6. `TELEGRAM_CHAT_ID` continua funcionando para um unico destino (compatibilidade).
-7. Preencha as variaveis de conexao PostgreSQL (`POSTGRES_DSN` ou `POSTGRES_*`).
-8. Para testes mais rapidos do scheduler, defina `FETCH_INTERVAL_MINUTES=10` (com `0`, ele usa `FETCH_INTERVAL_HOURS`).
+6. Preencha as variaveis de conexao PostgreSQL (`POSTGRES_DSN` ou `POSTGRES_*`).
+7. Para testes mais rapidos do scheduler, defina `FETCH_INTERVAL_MINUTES=10` (com `0`, ele usa `FETCH_INTERVAL_HOURS`).
 
 ## Banco PostgreSQL com Docker Compose
 

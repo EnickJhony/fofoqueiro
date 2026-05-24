@@ -88,7 +88,7 @@ Passos futuros:
 - Criar regra de unicidade por link para evitar duplicados.
 2) Criar a camada de configuração
 - Centralizar .env em settings.py.
-- Variáveis: RSS_SOURCES, DB_URL, FETCH_INTERVAL_HOURS, TELEGRAM_TOKEN, TELEGRAM_CHAT_ID, WHATSAPP_PROVIDER, WHATSAPP_CREDENTIALS.
+- Variáveis: RSS_SOURCES, DB_URL, FETCH_INTERVAL_HOURS, TELEGRAM_TOKEN, TELEGRAM_CHAT_IDS, WHATSAPP_PROVIDER, WHATSAPP_CREDENTIALS.
 3) Implementar coleta multi-portal
 - Mover lista de feeds para feeds/sources.py.
 - Fazer parser genérico para cada feed.

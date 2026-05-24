@@ -25,7 +25,6 @@ def _build_settings(send_to: str) -> Settings:
         timezone_name="America/Manaus",
         send_to=send_to,
         telegram_bot_token="token",
-        telegram_chat_id="chat",
         telegram_chat_ids=["chat"],
         whatsapp_phone="phone",
         whatsapp_apikey="apikey",
