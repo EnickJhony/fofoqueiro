@@ -31,3 +31,24 @@ def test_parse_feed_converts_published_at_to_local_timezone(monkeypatch) -> None
 
     assert len(news_items) == 1
     assert news_items[0].published_at.isoformat() == "2024-01-01T08:00:00-04:00"
+
+
+def test_parse_feed_ignores_entries_without_links(monkeypatch) -> None:
+    fake_feed = SimpleNamespace(
+        bozo=False,
+        feed=SimpleNamespace(title="Portal X"),
+        entries=[
+            SimpleNamespace(title="Sem link", link="", published="Mon, 01 Jan 2024 12:00:00 +0000"),
+            SimpleNamespace(
+                title="Com link",
+                link="https://example.com/noticia",
+                published="Mon, 01 Jan 2024 12:00:00 +0000",
+            ),
+        ],
+    )
+    monkeypatch.setattr(feedparser, "parse", lambda source_url: fake_feed)
+
+    news_items = parse_feed("https://example.com/feed", max_items=5)
+
+    assert len(news_items) == 1
+    assert news_items[0].title == "Com link"
