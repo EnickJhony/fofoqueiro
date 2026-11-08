@@ -72,3 +72,9 @@ Executar modo scheduler (coleta a cada X horas + resumo diario 18:00):
 ```bash
 python scripts/run_scheduler.py
 ```
+
+Executar os testes:
+
+```bash
+python -m pytest -q
+```
