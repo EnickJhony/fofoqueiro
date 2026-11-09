@@ -48,6 +48,7 @@ das notícias.
 - Dockerfile da aplicação.
 - Migrações versionadas do banco.
 - Logs estruturados, retries e encerramento limpo.
+- Alertas por e-mail quando a aplicação cair ou um ciclo crítico falhar.
 
 A lista detalhada e priorizada deve ser mantida em `Afazeres.md`.
 
@@ -155,6 +156,9 @@ Nunca registrar tokens, chaves ou senhas em logs, commits ou documentação.
   externa substituível.
 - A decisão atual é não adicionar novas funcionalidades ou testes de WhatsApp;
   essa integração poderá ser removida no futuro.
+- Alertas por e-mail são uma melhoria futura, ainda não implementada. Devem
+  usar SMTP ou um provedor externo, com cooldown, agrupamento de falhas e aviso
+  de recuperação para evitar excesso de mensagens.
 - Mudanças devem preservar a tolerância a feeds individuais e não interromper o
   ciclo completo por causa de uma única fonte.
 - Antes de alterar uma camada, verificar os testes e os contratos das camadas

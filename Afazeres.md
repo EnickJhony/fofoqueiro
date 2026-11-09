@@ -91,6 +91,10 @@ resume o conteúdo das notícias.
 
 - Criar uma imagem Docker da aplicação ou um serviço de execução.
 - Adicionar healthcheck real para verificar a aplicação e a conexão com o banco.
+- Enviar um alerta por e-mail quando a aplicação cair ou um ciclo crítico falhar.
+- Definir quais erros disparam o alerta, evitando uma mensagem para cada falha
+  repetida.
+- Adicionar cooldown, agrupamento e informação sobre recuperação do serviço.
 - Definir política de reinício e encerramento limpo.
 - Estruturar logs para facilitar busca e monitoramento.
 - Adicionar métricas simples de coleta, persistência e envio.
@@ -146,6 +150,10 @@ avaliação, mas ainda não existem de forma completa no projeto:
   envio.
 - Criar logs estruturados com identificador por execução.
 - Criar healthcheck que valide também a conexão com o banco.
+- Criar um notificador de e-mail para alertas de indisponibilidade e falhas
+  críticas.
+- Adicionar configuração segura de SMTP ou de um provedor de e-mail.
+- Testar o envio de alerta sem usar um servidor SMTP real.
 - Criar encerramento limpo do scheduler e fechamento da conexão PostgreSQL.
 - Criar `Dockerfile` para executar a aplicação junto ao `compose.yaml`.
 - Definir uma estratégia de retry para banco, RSS e APIs externas.
