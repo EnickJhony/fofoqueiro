@@ -28,6 +28,8 @@ das notícias.
 - Suíte inicial configurada com `pytest`.
 - Testes unitários para entidade, datas, configuração, parser, coletor,
   repositório, sumarizador, notificadores, jobs e scheduler.
+- Testes de configuração cobrem defaults, valores customizados, prioridade das
+  URLs de banco, limpeza de espaços e valores numéricos inválidos.
 
 ### Ainda não implementado ou incompleto
 
@@ -149,6 +151,8 @@ Nunca registrar tokens, chaves ou senhas em logs, commits ou documentação.
 - A deduplicação é feita pelo campo `link`.
 - A integração de WhatsApp usa CallMeBot e deve ser tratada como dependência
   externa substituível.
+- A decisão atual é não adicionar novas funcionalidades ou testes de WhatsApp;
+  essa integração poderá ser removida no futuro.
 - Mudanças devem preservar a tolerância a feeds individuais e não interromper o
   ciclo completo por causa de uma única fonte.
 - Antes de alterar uma camada, verificar os testes e os contratos das camadas
@@ -167,10 +171,12 @@ Nunca registrar tokens, chaves ou senhas em logs, commits ou documentação.
   link.
 - Foram adicionados testes dos jobs de coleta/resumo e do registro do scheduler,
   sem rede, banco real ou espera do relógio.
-- A suíte foi executada com resultado `27 passed`; um aviso de depreciação veio
+- A configuração foi testada para defaults, entradas customizadas, prioridade de
+  banco, limpeza de espaços e valores numéricos inválidos.
+- A suíte foi executada com resultado `33 passed`; um aviso de depreciação veio
   de um plugin externo do ambiente.
-- O próximo passo recomendado é expandir a cobertura para configurações inválidas
-  e integração isolada com PostgreSQL.
+- O próximo passo recomendado é expandir a cobertura para feeds com erro,
+  deduplicação, falhas de notificação e integração isolada com PostgreSQL.
 
 ## Regra de manutenção
 

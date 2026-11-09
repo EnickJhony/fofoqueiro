@@ -16,16 +16,17 @@ resume o conteúdo das notícias.
 - Testes placeholder substituídos por testes reais de coletor, repositório e
   sumarizador.
 - Testes adicionados para entidade `NewsItem`, conversão de datas e configuração.
+- Testes de configuração ampliados para valores inválidos, defaults, limpeza de
+  espaços e prioridade das URLs de banco.
 - Testes do parser ampliados para ignorar entradas sem link.
 - Testes adicionados para os jobs de coleta/resumo e para o registro do scheduler.
-- Suíte validada com `27 passed`.
+- Suíte validada com `33 passed`.
 
 ## Prioridade imediata
 
 ### 1. Expandir a cobertura de testes
 
-- Cobrir também configurações inválidas, feeds sem link, feeds com erro,
-  deduplicação e falhas de notificação.
+- Cobrir feeds com erro, deduplicação e falhas de notificação.
 - Adicionar testes de integração do repositório com PostgreSQL isolado.
 - Adicionar relatório de cobertura.
 - Executar os testes antes de cada mudança relevante.

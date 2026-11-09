@@ -1,3 +1,5 @@
+import pytest
+
 from src.config import settings as settings_module
 
 
@@ -75,3 +77,51 @@ def test_load_settings_prioritizes_database_url(monkeypatch) -> None:
     settings = settings_module.load_settings()
 
     assert settings.postgres_dsn == "postgresql://database-url"
+
+
+def test_load_settings_falls_back_to_default_sources_for_empty_value(monkeypatch) -> None:
+    _clear_settings_environment(monkeypatch)
+    monkeypatch.setattr(settings_module, "load_dotenv", lambda **kwargs: False)
+    monkeypatch.setenv("RSS_SOURCES", " , ")
+
+    settings = settings_module.load_settings()
+
+    assert settings.rss_sources == settings_module.DEFAULT_RSS_SOURCES
+
+
+def test_load_settings_strips_text_values(monkeypatch) -> None:
+    _clear_settings_environment(monkeypatch)
+    monkeypatch.setattr(settings_module, "load_dotenv", lambda **kwargs: False)
+    monkeypatch.setenv("POSTGRES_HOST", " db.example ")
+    monkeypatch.setenv("POSTGRES_USER", " app ")
+    monkeypatch.setenv("POSTGRES_PASSWORD", " secret ")
+    monkeypatch.setenv("POSTGRES_SSLMODE", " REQUIRE ")
+    monkeypatch.setenv("ENVIAR_PARA", " TELEGRAM ")
+    monkeypatch.setenv("TELEGRAM_BOT_TOKEN", " token ")
+
+    settings = settings_module.load_settings()
+
+    assert settings.postgres_host == "db.example"
+    assert settings.postgres_user == "app"
+    assert settings.postgres_password == "secret"
+    assert settings.postgres_sslmode == "require"
+    assert settings.send_to == "telegram"
+    assert settings.telegram_bot_token == "token"
+
+
+@pytest.mark.parametrize(
+    "variable_name",
+    [
+        "POSTGRES_PORT",
+        "FETCH_INTERVAL_MINUTES",
+        "FETCH_INTERVAL_HOURS",
+        "MAX_NOTICIAS",
+    ],
+)
+def test_load_settings_rejects_non_integer_values(monkeypatch, variable_name) -> None:
+    _clear_settings_environment(monkeypatch)
+    monkeypatch.setattr(settings_module, "load_dotenv", lambda **kwargs: False)
+    monkeypatch.setenv(variable_name, "not-a-number")
+
+    with pytest.raises(ValueError):
+        settings_module.load_settings()
