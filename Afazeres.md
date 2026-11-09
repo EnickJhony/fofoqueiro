@@ -24,16 +24,17 @@ resume o conteúdo das notícias.
 - Testes adicionados para falhas de banco, erros e credenciais ausentes do
   Telegram e canais de envio desconhecidos.
 - Testes adicionados para os jobs de coleta/resumo e para o registro do scheduler.
-- Suíte validada com `43 passed`.
+- Banco `fofoqueiro_test` criado e configurado para os testes de integração.
+- Testes de integração do repositório adicionados para inserção, deduplicação e
+  consultas por data/horas.
+- Suíte de integração validada com `3 passed`; suíte completa validada com
+  `46 passed`.
 
 ## Prioridade imediata
 
 ### 1. Expandir a cobertura de testes
 
 - Cobrir deduplicação e falhas de notificação adicionais.
-- Adicionar testes de integração do repositório com PostgreSQL isolado.
-- Configurar a suíte para usar o banco `fofoqueiro_test` sem depender do banco
-  de desenvolvimento.
 - Adicionar relatório de cobertura.
 - Executar os testes antes de cada mudança relevante.
 

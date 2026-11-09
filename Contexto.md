@@ -152,7 +152,9 @@ Nunca registrar tokens, chaves ou senhas em logs, commits ou documentação.
 
 - O banco atual é PostgreSQL; SQLite não faz parte do fluxo atual.
 - O banco isolado `fofoqueiro_test` foi criado no mesmo cluster PostgreSQL para
-  os testes de integração. A suíte ainda precisa ser configurada para usá-lo.
+  os testes de integração e já está configurado no `.env` local.
+- A configuração dos testes usa `TEST_POSTGRES_DSN` e valida que o banco alvo
+  seja exatamente `fofoqueiro_test`; sem essa variável, os testes são ignorados.
 - A deduplicação é feita pelo campo `link`.
 - A integração de WhatsApp usa CallMeBot e deve ser tratada como dependência
   externa substituível.
@@ -187,10 +189,14 @@ Nunca registrar tokens, chaves ou senhas em logs, commits ou documentação.
   banco, limpeza de espaços e valores numéricos inválidos.
 - O banco PostgreSQL `fofoqueiro_test` foi criado e a conexão foi validada com a
   role `fofoqueiro`; nenhuma credencial foi adicionada ao repositório.
-- A suíte foi executada com resultado `43 passed`; um aviso de depreciação veio
-  de um plugin externo do ambiente.
-- O próximo passo recomendado é criar a fixture e a configuração segura para os
-  testes de integração usarem `fofoqueiro_test`.
+- Foram criados três testes de integração do repositório para inserção,
+  deduplicação e consultas por data/horas.
+- O `.env` local foi alinhado ao cluster existente: role `fofoqueiro`, banco
+  `FOFOQUEIRO-AM` para a aplicação e `fofoqueiro_test` para a integração.
+- A suíte de integração passou com `3 passed` e a suíte completa com `46 passed`;
+  um aviso de depreciação veio de um plugin externo.
+- O próximo passo recomendado é adicionar relatório de cobertura e revisar as
+  lacunas restantes dos testes.
 
 ## Regra de manutenção
 
