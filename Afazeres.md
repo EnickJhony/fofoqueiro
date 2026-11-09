@@ -32,6 +32,8 @@ resume o conteúdo das notícias.
 
 - Cobrir deduplicação e falhas de notificação adicionais.
 - Adicionar testes de integração do repositório com PostgreSQL isolado.
+- Configurar a suíte para usar o banco `fofoqueiro_test` sem depender do banco
+  de desenvolvimento.
 - Adicionar relatório de cobertura.
 - Executar os testes antes de cada mudança relevante.
 
