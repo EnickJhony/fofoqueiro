@@ -30,6 +30,8 @@ das notícias.
   repositório, sumarizador, notificadores, jobs e scheduler.
 - Testes de configuração cobrem defaults, valores customizados, prioridade das
   URLs de banco, limpeza de espaços e valores numéricos inválidos.
+- Testes de falhas cobrem feeds inválidos, fontes sem título ou data, isolamento
+  de erro no coletor, falhas de commit, erros do Telegram e canais desconhecidos.
 
 ### Ainda não implementado ou incompleto
 
@@ -169,14 +171,18 @@ Nunca registrar tokens, chaves ou senhas em logs, commits ou documentação.
   sumarizador.
 - Foram adicionados testes para entidade, datas, configuração e entradas RSS sem
   link.
+- O coletor agora isola falhas individuais de fontes RSS, registra a URL com
+  erro e continua processando as demais fontes.
+- Foram adicionados testes para feeds inválidos, dados incompletos, falhas de
+  banco e comportamentos de erro do Telegram.
 - Foram adicionados testes dos jobs de coleta/resumo e do registro do scheduler,
   sem rede, banco real ou espera do relógio.
 - A configuração foi testada para defaults, entradas customizadas, prioridade de
   banco, limpeza de espaços e valores numéricos inválidos.
-- A suíte foi executada com resultado `33 passed`; um aviso de depreciação veio
+- A suíte foi executada com resultado `43 passed`; um aviso de depreciação veio
   de um plugin externo do ambiente.
-- O próximo passo recomendado é expandir a cobertura para feeds com erro,
-  deduplicação, falhas de notificação e integração isolada com PostgreSQL.
+- O próximo passo recomendado é adicionar integração isolada com PostgreSQL,
+  relatório de cobertura e concluir a estratégia de notificações do Telegram.
 
 ## Regra de manutenção
 

@@ -1,4 +1,8 @@
+import io
+from urllib.error import HTTPError
 from urllib.parse import parse_qs
+
+import pytest
 
 from src.config.settings import Settings
 from src.notifiers.dispatcher import dispatch_message
@@ -63,8 +67,65 @@ def test_send_telegram_message_splits_large_payload(monkeypatch) -> None:
     assert rebuilt_message == message
 
 
+def test_send_telegram_message_returns_false_without_token(monkeypatch) -> None:
+    called = False
+
+    def fake_urlopen(*args, **kwargs):
+        nonlocal called
+        called = True
+
+    monkeypatch.setattr("src.notifiers.telegram.urlopen", fake_urlopen)
+
+    assert send_telegram_message("", "123", "Mensagem") is False
+    assert called is False
+
+
+def test_send_telegram_message_returns_false_for_non_success_status(monkeypatch) -> None:
+    class DummyResponse:
+        status = 500
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, exc_type, exc, tb):
+            return False
+
+    monkeypatch.setattr("src.notifiers.telegram.urlopen", lambda *args, **kwargs: DummyResponse())
+
+    assert send_telegram_message("token", "123", "Mensagem") is False
+
+
+def test_send_telegram_message_raises_for_api_error(monkeypatch) -> None:
+    def fake_urlopen(*args, **kwargs):
+        raise HTTPError(
+            url="https://api.telegram.org",
+            code=400,
+            msg="Bad Request",
+            hdrs=None,
+            fp=io.BytesIO(b'{"description": "chat not found"}'),
+        )
+
+    monkeypatch.setattr("src.notifiers.telegram.urlopen", fake_urlopen)
+
+    with pytest.raises(RuntimeError, match="chat not found"):
+        send_telegram_message("token", "123", "Mensagem")
+
+
 def test_dispatch_message_returns_false_when_disabled() -> None:
     settings = _build_settings(send_to="nenhum")
+    assert dispatch_message(settings, "mensagem") is False
+
+
+def test_dispatch_message_returns_false_for_unknown_channel() -> None:
+    settings = _build_settings(send_to="signal")
+
+    assert dispatch_message(settings, "mensagem") is False
+
+
+def test_dispatch_message_returns_false_without_telegram_chats() -> None:
+    settings = _build_settings(send_to="telegram")
+    settings.telegram_chat_ids = []
+
     assert dispatch_message(settings, "mensagem") is False
 
 

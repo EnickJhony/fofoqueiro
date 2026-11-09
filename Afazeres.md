@@ -18,15 +18,19 @@ resume o conteúdo das notícias.
 - Testes adicionados para entidade `NewsItem`, conversão de datas e configuração.
 - Testes de configuração ampliados para valores inválidos, defaults, limpeza de
   espaços e prioridade das URLs de banco.
-- Testes do parser ampliados para ignorar entradas sem link.
+- Testes do parser ampliados para feeds inválidos, títulos ausentes, datas
+  ausentes e entradas sem link.
+- Coletor protegido contra falha isolada de uma fonte, com log da URL afetada.
+- Testes adicionados para falhas de banco, erros e credenciais ausentes do
+  Telegram e canais de envio desconhecidos.
 - Testes adicionados para os jobs de coleta/resumo e para o registro do scheduler.
-- Suíte validada com `33 passed`.
+- Suíte validada com `43 passed`.
 
 ## Prioridade imediata
 
 ### 1. Expandir a cobertura de testes
 
-- Cobrir feeds com erro, deduplicação e falhas de notificação.
+- Cobrir deduplicação e falhas de notificação adicionais.
 - Adicionar testes de integração do repositório com PostgreSQL isolado.
 - Adicionar relatório de cobertura.
 - Executar os testes antes de cada mudança relevante.

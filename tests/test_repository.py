@@ -37,6 +37,11 @@ class FakeConnection:
         self.commits += 1
 
 
+class FailingCommitConnection(FakeConnection):
+    def commit(self) -> None:
+        raise RuntimeError("database unavailable")
+
+
 def _news_item() -> NewsItem:
     return NewsItem(
         source_name="Portal X",
@@ -69,3 +74,15 @@ def test_get_news_for_day_returns_repository_rows() -> None:
 
     assert result == rows
     assert cursor.executed[0][1] == ("2024-01-01",)
+
+
+def test_save_news_items_propagates_commit_error() -> None:
+    cursor = FakeCursor(rowcounts=[1])
+    repository = NewsRepository(FailingCommitConnection(cursor))
+
+    try:
+        repository.save_news_items([_news_item()])
+    except RuntimeError as exc:
+        assert str(exc) == "database unavailable"
+    else:
+        raise AssertionError("Expected the database error to be propagated")
