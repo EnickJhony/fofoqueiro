@@ -78,3 +78,9 @@ Executar os testes:
 ```bash
 python -m pytest -q
 ```
+
+Medir a cobertura dos testes unitários:
+
+```bash
+python -m pytest --ignore=tests/integration --cov=src --cov-report=term-missing
+```

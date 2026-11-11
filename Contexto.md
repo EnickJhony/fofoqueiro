@@ -195,8 +195,14 @@ Nunca registrar tokens, chaves ou senhas em logs, commits ou documentação.
   `FOFOQUEIRO-AM` para a aplicação e `fofoqueiro_test` para a integração.
 - A suíte de integração passou com `3 passed` e a suíte completa com `46 passed`;
   um aviso de depreciação veio de um plugin externo.
-- O próximo passo recomendado é adicionar relatório de cobertura e revisar as
-  lacunas restantes dos testes.
+- `pytest-cov` foi adicionado às dependências.
+- A cobertura unitária foi medida com `43 passed` e resultado total de `74%`.
+- O relatório apontou lacunas em `src/app.py`, `src/config/logging.py`,
+  `src/storage/database.py`, caminhos de notificação e alguns ramos menores.
+- A execução conjunta de cobertura com os testes de integração travou no ambiente;
+  os três testes de integração continuam passando sem cobertura.
+- O próximo passo recomendado é cobrir as lacunas que representem risco real,
+  começando pela conexão/inicialização do banco e pelo healthcheck.
 
 ## Regra de manutenção
 

@@ -29,13 +29,17 @@ resume o conteúdo das notícias.
   consultas por data/horas.
 - Suíte de integração validada com `3 passed`; suíte completa validada com
   `46 passed`.
+- `pytest-cov` adicionado e relatório unitário executado com cobertura total de
+  `74%`.
+- Lacunas de cobertura identificadas em inicialização da aplicação, conexão do
+  banco e alguns caminhos de notificação.
 
 ## Prioridade imediata
 
 ### 1. Expandir a cobertura de testes
 
 - Cobrir deduplicação e falhas de notificação adicionais.
-- Adicionar relatório de cobertura.
+- Adicionar testes para as lacunas de cobertura que representam riscos reais.
 - Executar os testes antes de cada mudança relevante.
 
 ### 2. Corrigir o agendamento por timezone
